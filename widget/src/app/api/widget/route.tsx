@@ -104,8 +104,28 @@ export async function GET(
       }
     );
   }
-const cover = book.coverImage ? book.coverImage : null;
- const padding = Math.max(
+let cover = "";
+
+if (book.coverImage) {
+  const response = await fetch(
+    book.coverImage
+  );
+
+  const buffer =
+    await response.arrayBuffer();
+
+  const base64 = Buffer.from(
+    buffer
+  ).toString("base64");
+
+  const contentType =
+    response.headers.get(
+      "content-type"
+    ) || "image/jpeg";
+
+  cover = `data:${contentType};base64,${base64}`;
+}
+  const padding = Math.max(
   20,
   width * 0.022
 );
@@ -233,7 +253,7 @@ const svg = `
   width="${coverWidth}"
   height="${coverHeight}"
   clip-path="url(#coverClip)"
-  preserveAspectRatio="xMidYMid meet"
+  preserveAspectRatio="xMidYMid slice"
  />
  `
      : ""
