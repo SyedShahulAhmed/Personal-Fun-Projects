@@ -284,17 +284,7 @@ const svg = `
    )
    .join("")}
 
- <text
-  x="${contentX}"
-  y="${authorY - 20}"
-  fill="${authorColor}"
-  font-size="10"
-  font-family="Inter, sans-serif"
- >
-  ${escapeXml(
-    book.author
-  ).toUpperCase()}
- </text>
+
 
  <text
   x="${contentX}"
@@ -304,7 +294,7 @@ const svg = `
   font-weight="600"
   font-family="Inter, sans-serif"
  >
-  CHAPTER ${book.progress} / ${book.totalPages}
+  PAGE ${book.progress} / ${book.totalPages}
  </text>
 
  <text
@@ -345,7 +335,7 @@ const svg = `
       "Content-Type":
         "image/svg+xml",
       "Cache-Control":
-        "no-store",
+        "public, s-maxage=21600, stale-while-revalidate=86400",
     },
   });
 }
