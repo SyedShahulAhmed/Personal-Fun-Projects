@@ -3,7 +3,7 @@ import { WidgetTheme } from "@/types/theme";
 export const defaultTheme: WidgetTheme = {
   // Card
   cardBg: "#151f2e",
-  border: "#FF0000",
+  border: "#151f2e",
 
   // Text
   heading: "#FF0000",
@@ -21,6 +21,6 @@ export const defaultTheme: WidgetTheme = {
   cardHeight: 230,
 
   // Border
-  borderWidth: 2,
+  borderWidth: 1,
   borderRadius: 8,
 };
