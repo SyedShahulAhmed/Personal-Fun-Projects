@@ -1,21 +1,26 @@
 import { WidgetTheme } from "@/types/theme";
 
 export const defaultTheme: WidgetTheme = {
-  cardBg: "#050816",
-  border: "#164E63",
+  // Card
+  cardBg: "#000000",
+  border: "#FFFFFF",
 
-  heading: "#00E5FF",
+  // Text
+  heading: "#FF0000",
   title: "#FFFFFF",
-  author: "#9CA3AF",
-  pages: "#D1D5DB",
+  author: "#B3B3B3",
+  pages: "#FFFFFF",
 
-  progressBar: "#00E5FF",
-  progressTrack: "#1E293B",
-  percentage: "#00E5FF",
+  // Progress
+  progressBar: "#FF0000",
+  progressTrack: "#FFFFFF",
+  percentage: "#FFFFFF",
 
-  cardWidth: 500,
-  cardHeight: 240,
+  // Size
+  cardWidth: 480,
+  cardHeight: 230,
 
-  borderWidth: 1,
-  borderRadius: 24,
+  // Border
+  borderWidth: 2,
+  borderRadius: 8,
 };

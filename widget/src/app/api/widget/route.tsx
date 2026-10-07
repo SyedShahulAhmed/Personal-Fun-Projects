@@ -1,4 +1,5 @@
 import { getCurrentlyReading, transformBook } from "@/services/Hardcover";
+  import { defaultTheme } from "@/lib/default-theme";
 
 
 export async function GET(
@@ -7,62 +8,66 @@ export async function GET(
   const { searchParams } =
     new URL(request.url);
 
-  const bg =
-    searchParams.get("bg") ??
-    "#050816";
 
-  const border =
-    searchParams.get("border") ??
-    "#164E63";
+const bg =
+  searchParams.get("bg") ??
+  defaultTheme.cardBg;
 
-  const heading =
-    searchParams.get("heading") ??
-    "#00E5FF";
+const border =
+  searchParams.get("border") ??
+  defaultTheme.border;
 
-  const titleColor =
-    searchParams.get("title") ??
-    "#FFFFFF";
+const heading =
+  searchParams.get("heading") ??
+  defaultTheme.heading;
 
-  const authorColor =
-    searchParams.get("author") ??
-    "#9CA3AF";
+const titleColor =
+  searchParams.get("title") ??
+  defaultTheme.title;
 
-  const pagesColor =
-    searchParams.get("pages") ??
-    "#D1D5DB";
+const authorColor =
+  searchParams.get("author") ??
+  defaultTheme.author;
 
-  const progressBar =
-    searchParams.get("bar") ??
-    "#00E5FF";
+const pagesColor =
+  searchParams.get("pages") ??
+  defaultTheme.pages;
 
-  const progressTrack =
-    searchParams.get("track") ??
-    "#1E293B";
+const progressBar =
+  searchParams.get("bar") ??
+  defaultTheme.progressBar;
 
-  const percentageColor =
-    searchParams.get("percent") ??
-    "#00E5FF";
+const progressTrack =
+  searchParams.get("track") ??
+  defaultTheme.progressTrack;
 
-  const width =
-    Number(
-      searchParams.get("width")
-    ) || 900;
+const percentageColor =
+  searchParams.get("percent") ??
+  defaultTheme.percentage;
 
-  const height =
-    Number(
-      searchParams.get("height")
-    ) || 280;
+const width =
+  Number(
+    searchParams.get("width")
+  ) ||
+  defaultTheme.cardWidth;
 
-  const borderWidth =
-    Number(
-      searchParams.get("bw")
-    ) || 1;
+const height =
+  Number(
+    searchParams.get("height")
+  ) ||
+  defaultTheme.cardHeight;
 
-  const radius =
-    Number(
-      searchParams.get("radius")
-    ) || 24;
+const borderWidth =
+  Number(
+    searchParams.get("bw")
+  ) ||
+  defaultTheme.borderWidth;
 
+const radius =
+  Number(
+    searchParams.get("radius")
+  ) ||
+  defaultTheme.borderRadius;
   const data =
     await getCurrentlyReading();
 
@@ -281,9 +286,9 @@ const svg = `
 
  <text
   x="${contentX}"
-  y="${authorY}"
+  y="${authorY - 20}"
   fill="${authorColor}"
-  font-size="11"
+  font-size="10"
   font-family="Inter, sans-serif"
  >
   ${escapeXml(
@@ -293,9 +298,9 @@ const svg = `
 
  <text
   x="${contentX}"
-  y="${progressY - 28}"
+  y="${progressY - 10}"
   fill="${pagesColor}"
-  font-size="15"
+  font-size="13"
   font-weight="600"
   font-family="Inter, sans-serif"
  >
@@ -304,10 +309,10 @@ const svg = `
 
  <text
   x="${contentX + progressWidth}"
-  y="${progressY - 28}"
+  y="${progressY - 10}"
   text-anchor="end"
   fill="${percentageColor}"
-  font-size="15"
+  font-size="13"
   font-weight="700"
   font-family="Inter, sans-serif"
  >
@@ -316,7 +321,7 @@ const svg = `
 
  <rect
   x="${contentX}"
-  y="${progressY - 15}"
+  y="${progressY + 2}"
   width="${progressWidth}"
   height="12"
   rx="6"
@@ -325,35 +330,12 @@ const svg = `
 
  <rect
   x="${contentX}"
-  y="${progressY - 15}"
+  y="${progressY + 2}"
   width="${progressFillWidth}"
   height="12"
   rx="6"
   fill="${progressBar}"
  />
-
- <text
-  x="${updateLabelX}"
-  y="${updateLabelY}"
-  fill="${authorColor}"
-  font-size="12"
-  font-weight="600"
-  font-family="Arial"
- >
-  LAST UPDATED:
- </text>
-
- <text
-  x="${updateDateX}"
-  y="${updateLabelY}"
-  text-anchor="end"
-  fill="#FF4D1F"
-  font-size="12"
-  font-weight="700"
-  font-family="Arial"
- >
-  ${lastUpdated.toUpperCase()}
- </text>
 
 </svg>
 `;
