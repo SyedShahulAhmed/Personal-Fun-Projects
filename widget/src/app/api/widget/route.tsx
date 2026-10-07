@@ -345,7 +345,7 @@ const svg = `
       "Content-Type":
         "image/svg+xml",
       "Cache-Control":
-        "public, s-maxage=21600, stale-while-revalidate=86400",
+        "no-store",
     },
   });
 }
