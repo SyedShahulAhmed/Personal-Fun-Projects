@@ -44,7 +44,7 @@ export async function getCurrentlyReading() {
         `,
     }),
     next: {
-      revalidate: 21600, // 6 hours
+      revalidate: 30, // 6 hours
     },
   });
 
