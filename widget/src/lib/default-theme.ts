@@ -2,8 +2,8 @@ import { WidgetTheme } from "@/types/theme";
 
 export const defaultTheme: WidgetTheme = {
   // Card
-  cardBg: "#000000",
-  border: "#FFFFFF",
+  cardBg: "#151f2e",
+  border: "#FF0000",
 
   // Text
   heading: "#FF0000",
