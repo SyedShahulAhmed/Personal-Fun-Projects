@@ -298,7 +298,7 @@ const svg = `
 
  <text
   x="${contentX}"
-  y="${progressY - 10}"
+  y="${progressY-18}"
   fill="${pagesColor}"
   font-size="14"
   font-weight="600"
@@ -309,7 +309,7 @@ const svg = `
 
  <text
   x="${contentX + progressWidth}"
-  y="${progressY - 10}"
+  y="${progressY - 18}"
   text-anchor="end"
   fill="${percentageColor}"
   font-size="14"
@@ -321,7 +321,7 @@ const svg = `
 
  <rect
   x="${contentX}"
-  y="${progressY + 2}"
+  y="${progressY - 6}"
   width="${progressWidth}"
   height="12"
   rx="6"
@@ -330,7 +330,7 @@ const svg = `
 
  <rect
   x="${contentX}"
-  y="${progressY + 2}"
+  y="${progressY - 6}"
   width="${progressFillWidth}"
   height="12"
   rx="6"
