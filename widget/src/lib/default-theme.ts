@@ -3,24 +3,24 @@ import { WidgetTheme } from "@/types/theme";
 export const defaultTheme: WidgetTheme = {
   // Card
   cardBg: "#151f2e",
-  border: "#151f2e",
+  border: "#9c0012",
 
   // Text
-  heading: "#FF0000",
+  heading: "#B31312",
   title: "#FFFFFF",
   author: "#B3B3B3",
-  pages: "#FFFFFF",
+  pages: "#B31312",
 
   // Progress
-  progressBar: "#FF0000",
+  progressBar: "#B31312",
   progressTrack: "#FFFFFF",
-  percentage: "#FFFFFF",
+  percentage: "#B31312",
 
   // Size
   cardWidth: 480,
   cardHeight: 230,
 
   // Border
-  borderWidth: 1,
-  borderRadius: 8,
+  borderWidth: 10,
+  borderRadius: 10,
 };

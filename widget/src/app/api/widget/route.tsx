@@ -136,12 +136,12 @@ if (book.coverImage) {
 );
 
 const coverHeight = Math.min(
-  height - padding * 2,
-  height * 0.72
+  height - padding * 1.2,
+  height * 0.88
 );
 
 const coverWidth =
-  coverHeight * 0.75;
+  coverHeight * 0.72;
 
 const coverX = padding;
 
@@ -151,7 +151,7 @@ const coverY =
 const contentX =
   coverX +
   coverWidth +
-  padding * 0.75;
+  padding * 0.5;
 
 const contentWidth =
   width -
@@ -284,13 +284,23 @@ const svg = `
    )
    .join("")}
 
-
+ <text
+  x="${contentX}"
+  y="${authorY - 20}"
+  fill="${authorColor}"
+  font-size="10"
+  font-family="Inter, sans-serif"
+ >
+  ${escapeXml(
+    book.author
+  ).toUpperCase()}
+ </text>
 
  <text
   x="${contentX}"
   y="${progressY - 10}"
   fill="${pagesColor}"
-  font-size="13"
+  font-size="14"
   font-weight="600"
   font-family="Inter, sans-serif"
  >
@@ -302,7 +312,7 @@ const svg = `
   y="${progressY - 10}"
   text-anchor="end"
   fill="${percentageColor}"
-  font-size="13"
+  font-size="14"
   font-weight="700"
   font-family="Inter, sans-serif"
  >
