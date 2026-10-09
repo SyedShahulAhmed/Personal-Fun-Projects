@@ -175,7 +175,7 @@ const headingY =
   coverY + 20;
 
 const titleY =
-  headingY + 35;
+  headingY + 23;
 
 const authorY =
   titleY +
@@ -236,7 +236,7 @@ const svg = `
 
  <text
   x="${headingX}"
-  y="${headingY}"
+  y="${headingY - 5}  "
   fill="${heading}"
   font-size="${Math.max(
     14,
@@ -269,7 +269,7 @@ const svg = `
      (line, index) => `
  <text
   x="${contentX}"
-  y="${titleY + index * 22}"
+  y="${titleY + index *22}"
   fill="${titleColor}"
   font-size="${Math.max(
     18,
@@ -297,46 +297,73 @@ const svg = `
   ).toWellFormed()}
  </text>
 
+
+<!-- Divider line -->
+<line
+  x1="${contentX}"
+  y1="${progressY - 45}"
+  x2="${contentX + progressWidth}"
+  y2="${progressY - 45}"
+  stroke="${border}"
+  stroke-width="1"
+  opacity="0.6"
+/>
+
  <text
   x="${contentX}"
-  y="${progressY-12}"
+  y="${progressY - 24}"
+  fill="${pagesColor}"
+  font-size="13"
+  font-weight="500"
+  font-family="Arial, sans-serif"
+>
+  ${book.progress}/${book.totalPages} Pages
+ </text>
+
+ <rect
+  x="${contentX - 1}"
+  y="${progressY - 10}"
+  width="${progressWidth}"
+  height="8"
+  rx="4"
+  fill="${progressTrack}"
+ />
+
+
+
+ <rect
+  x="${contentX - 1}"
+  y="${progressY - 10}"
+  width="${progressFillWidth}"
+  height="8"
+  rx="4"
+  fill="${progressBar}"
+ />
+
+ <text
+  x="${contentX}"
+  y="${progressY + 15}"
   fill="${pagesColor}"
   font-size="12"
-  font-weight="600"
-  font-family="Inter, sans-serif"
- >
-  PAGE ${book.progress} / ${book.totalPages}
+  font-weight="500"
+  font-family="Inter, Arial, sans-serif"
+>
+  Progress
  </text>
 
  <text
   x="${contentX + progressWidth}"
-  y="${progressY - 12}"
+  y="${progressY + 15}"
   text-anchor="end"
   fill="${percentageColor}"
   font-size="12"
   font-weight="700"
-  font-family="Inter, sans-serif"
- >
+  font-family="Inter, Arial, sans-serif"
+>
   ${book.percentage}%
  </text>
+ 
 
- <rect
-  x="${contentX - 1}"
-  y="${progressY - 2}"
-  width="${progressWidth}"
-  height="10"
-  rx="6"
-  fill="${progressTrack}"
- />
-
- <rect
-  x="${contentX - 1}"
-  y="${progressY - 2}"
-  width="${progressFillWidth}"
-  height="10"
-  rx="6"
-  fill="${progressBar}"
- />
 
 </svg>
 `;
