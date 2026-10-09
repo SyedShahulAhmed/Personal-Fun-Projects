@@ -131,13 +131,13 @@ if (book.coverImage) {
   cover = `data:${contentType};base64,${base64}`;
 }
   const padding = Math.max(
-  20,
+  10,
   width * 0.022
 );
 
 const coverHeight = Math.min(
-  height - padding * 1.2,
-  height * 0.88
+  height - padding * 1,
+  height * 0.80
 );
 
 const coverWidth =
@@ -151,7 +151,7 @@ const coverY =
 const contentX =
   coverX +
   coverWidth +
-  padding * 0.5;
+  padding * 1;
 
 const contentWidth =
   width -
@@ -269,7 +269,7 @@ const svg = `
      (line, index) => `
  <text
   x="${contentX}"
-  y="${titleY + index * 34}"
+  y="${titleY + index * 22}"
   fill="${titleColor}"
   font-size="${Math.max(
     18,
@@ -278,7 +278,7 @@ const svg = `
   font-weight="700"
   font-family="Arial"
  >
-  ${escapeXml(line).toUpperCase()}
+  ${escapeXml(line).toWellFormed()}
  </text>
  `
    )
@@ -286,21 +286,22 @@ const svg = `
 
  <text
   x="${contentX}"
-  y="${authorY - 20}"
+  y="${authorY - 35}"
   fill="${authorColor}"
+  font-weight="400"
   font-size="10"
-  font-family="Inter, sans-serif"
+  font-family="Arial"
  >
   ${escapeXml(
     book.author
-  ).toUpperCase()}
+  ).toWellFormed()}
  </text>
 
  <text
   x="${contentX}"
-  y="${progressY-18}"
+  y="${progressY-12}"
   fill="${pagesColor}"
-  font-size="14"
+  font-size="12"
   font-weight="600"
   font-family="Inter, sans-serif"
  >
@@ -309,10 +310,10 @@ const svg = `
 
  <text
   x="${contentX + progressWidth}"
-  y="${progressY - 18}"
+  y="${progressY - 12}"
   text-anchor="end"
   fill="${percentageColor}"
-  font-size="14"
+  font-size="12"
   font-weight="700"
   font-family="Inter, sans-serif"
  >
@@ -320,19 +321,19 @@ const svg = `
  </text>
 
  <rect
-  x="${contentX}"
-  y="${progressY - 6}"
+  x="${contentX - 1}"
+  y="${progressY - 2}"
   width="${progressWidth}"
-  height="12"
+  height="10"
   rx="6"
   fill="${progressTrack}"
  />
 
  <rect
-  x="${contentX}"
-  y="${progressY - 6}"
+  x="${contentX - 1}"
+  y="${progressY - 2}"
   width="${progressFillWidth}"
-  height="12"
+  height="10"
   rx="6"
   fill="${progressBar}"
  />

@@ -17,10 +17,10 @@ export const defaultTheme: WidgetTheme = {
   percentage: "#B31312",
 
   // Size
-  cardWidth: 480,
-  cardHeight: 230,
+  cardWidth: 450,
+  cardHeight: 200,
 
   // Border
-  borderWidth: 10,
-  borderRadius: 10,
+  borderWidth: 6,
+  borderRadius: 6,
 };
