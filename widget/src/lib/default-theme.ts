@@ -6,9 +6,9 @@ export const defaultTheme: WidgetTheme = {
   border: "#9c0012",
 
   // Text
-  heading: "#B31312",
-  title: "#FFFFFF",
-  author: "#B3B3B3",
+  heading: "#FFFFFF",
+  title: "#B31312",
+  author: "#8B0F0E",
   pages: "#B31312",
 
   // Progress
