@@ -317,7 +317,7 @@ const svg = `
   font-weight="500"
   font-family="Arial, sans-serif"
 >
-  ${book.progress}/${book.totalPages} Pages
+  ${book.progress}/${book.totalPages} pages
  </text>
 
  <rect
