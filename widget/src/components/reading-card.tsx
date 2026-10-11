@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { BookOpen, UserRound } from "lucide-react";
 import { WidgetTheme } from "@/types/theme";
 
 interface Props {
@@ -7,94 +8,161 @@ interface Props {
 }
 
 export default function ReadingCard({ book, theme }: Props) {
+  const percentage = Math.min(
+    100,
+    Math.max(0, Number(book.percentage) || 0)
+  );
+
   return (
     <div
-      className="rounded-2xl border p-5"
+      className="relative box-border overflow-hidden p-5 text-white shadow-[0_0_35px_rgba(0,229,255,0.04)]"
       style={{
         backgroundColor: theme.cardBg,
         borderColor: theme.border,
-
+        borderStyle: "solid",
         width: `${theme.cardWidth}px`,
-
         height: `${theme.cardHeight}px`,
         borderWidth: `${theme.borderWidth}px`,
         borderRadius: `${theme.borderRadius}px`,
       }}
     >
-      <p
-        className="mb-4 text-sm font-medium uppercase"
+      {/* Subtle cyan glow */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-16 -top-20 h-40 w-40 rounded-full blur-[70px]"
         style={{
-          color: theme.heading,
+          backgroundColor: theme.heading,
+          opacity: 0.08,
         }}
-      >
-        Currently Reading
-      </p>
+      />
 
-      <div className="flex gap-5">
-        <Image
-          src={book.coverImage}
-          alt={book.title}
-          width={120}
-          height={180}
-          className="
-            h-[180px]
-            w-[120px]
-            rounded-lg
-            object-cover
-            flex-shrink-0
-          "
+      {/* Heading */}
+      <div className="relative mb-4 flex items-center gap-2">
+        <BookOpen
+          className="h-4 w-4 shrink-0"
+          style={{ color: theme.heading }}
+          strokeWidth={1.7}
         />
 
-        <div className="flex flex-1 flex-col">
+        <p
+          className="text-xs font-semibold uppercase tracking-[0.2em]"
+          style={{ color: theme.heading }}
+        >
+          Currently Reading
+        </p>
+
+        <span
+          className="ml-auto h-1.5 w-1.5 shrink-0 rounded-full"
+          style={{
+            backgroundColor: theme.heading,
+            boxShadow: `0 0 8px ${theme.heading}`,
+          }}
+        />
+      </div>
+
+      {/* Book details */}
+      <div className="relative flex min-h-0 gap-4">
+        {/* Cover */}
+        <div className="relative h-45 w-30 shrink-0 overflow-hidden rounded-lg border border-white/10 bg-black/20 shadow-lg">
+          {book.coverImage ? (
+            <Image
+              src={book.coverImage}
+              alt={book.title || "Book cover"}
+              width={120}
+              height={180}
+              unoptimized
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-3 text-center">
+              <BookOpen
+                className="h-7 w-7"
+                style={{ color: theme.heading }}
+              />
+              <span className="text-[10px] text-slate-500">
+                No cover available
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Information */}
+        <div className="flex min-w-0 flex-1 flex-col">
           <h2
-            className="line-clamp-3 text-xl font-bold"
-            style={{
-              color: theme.title,
-            }}
+            className="line-clamp-3 wrap-break-word text-lg font-bold leading-snug sm:text-xl"
+            style={{ color: theme.title }}
+            title={book.title}
           >
             {book.title}
           </h2>
 
-          <p
-            className="mt-2 text-sm"
-            style={{
-              color: theme.author,
-            }}
-          >
-            {book.author}
-          </p>
+          <div className="mt-2 flex min-w-0 items-center gap-1.5">
+            <UserRound
+              className="h-3.5 w-3.5 shrink-0"
+              style={{ color: theme.author }}
+            />
 
-          <div className="mt-auto pt-6">
+            <p
+              className="truncate text-sm"
+              style={{ color: theme.author }}
+              title={book.author}
+            >
+              {book.author}
+            </p>
+          </div>
+
+          {/* Reading progress */}
+          <div className="mt-auto pt-4">
+            <div className="mb-2 flex items-center justify-between gap-2">
+              <span
+                className="text-[10px] font-medium uppercase tracking-[0.15em]"
+                style={{ color: theme.pages }}
+              >
+                Reading Progress
+              </span>
+
+              <span
+                className="shrink-0 font-mono text-xs font-semibold"
+                style={{ color: theme.percentage }}
+              >
+                {percentage}%
+              </span>
+            </div>
+
             <div
-              className="h-2 rounded-full"
+              className="h-1.5 w-full overflow-hidden rounded-full"
               style={{
                 backgroundColor: theme.progressTrack,
               }}
+              role="progressbar"
+              aria-label="Reading progress"
+              aria-valuenow={percentage}
+              aria-valuemin={0}
+              aria-valuemax={100}
             >
               <div
-                className="h-full rounded-full"
+                className="h-full rounded-full transition-[width] duration-500 ease-out"
                 style={{
-                  width: `${book.percentage}%`,
+                  width: `${percentage}%`,
                   backgroundColor: theme.progressBar,
+                  boxShadow: `0 0 10px ${theme.progressBar}55`,
                 }}
               />
             </div>
 
-            <div className="mt-3 flex justify-between">
+            <div className="mt-2 flex items-center justify-between gap-2">
               <span
-                style={{
-                  color: theme.pages,
-                }}
+                className="truncate text-xs"
+                style={{ color: theme.pages }}
               >
-                {book.progress} / {book.totalPages}
+                {book.progress} / {book.totalPages} pages
               </span>
 
               <span
-                style={{
-                  color: theme.percentage,
-                }}
+                className="shrink-0 text-[10px] uppercase tracking-wider"
+                style={{ color: theme.author }}
               >
-                {book.percentage}%
+                {percentage >= 100 ? "Completed" : "In Progress"}
               </span>
             </div>
           </div>

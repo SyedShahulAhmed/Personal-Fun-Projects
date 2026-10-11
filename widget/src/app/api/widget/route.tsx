@@ -1,78 +1,40 @@
 import { getCurrentlyReading, transformBook } from "@/services/Hardcover";
-  import { defaultTheme } from "@/lib/default-theme";
+import { defaultTheme } from "@/lib/default-theme";
 
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
 
-export async function GET(
-  request: Request
-) {
-  const { searchParams } =
-    new URL(request.url);
+  const bg = searchParams.get("bg") ?? defaultTheme.cardBg;
 
+  const border = searchParams.get("border") ?? defaultTheme.border;
 
-const bg =
-  searchParams.get("bg") ??
-  defaultTheme.cardBg;
+  const heading = searchParams.get("heading") ?? defaultTheme.heading;
 
-const border =
-  searchParams.get("border") ??
-  defaultTheme.border;
+  const titleColor = searchParams.get("title") ?? defaultTheme.title;
 
-const heading =
-  searchParams.get("heading") ??
-  defaultTheme.heading;
+  const authorColor = searchParams.get("author") ?? defaultTheme.author;
 
-const titleColor =
-  searchParams.get("title") ??
-  defaultTheme.title;
+  const pagesColor = searchParams.get("pages") ?? defaultTheme.pages;
 
-const authorColor =
-  searchParams.get("author") ??
-  defaultTheme.author;
+  const progressBar = searchParams.get("bar") ?? defaultTheme.progressBar;
 
-const pagesColor =
-  searchParams.get("pages") ??
-  defaultTheme.pages;
+  const progressTrack = searchParams.get("track") ?? defaultTheme.progressTrack;
 
-const progressBar =
-  searchParams.get("bar") ??
-  defaultTheme.progressBar;
+  const percentageColor =
+    searchParams.get("percent") ?? defaultTheme.percentage;
 
-const progressTrack =
-  searchParams.get("track") ??
-  defaultTheme.progressTrack;
+  const width = Number(searchParams.get("width")) || defaultTheme.cardWidth;
 
-const percentageColor =
-  searchParams.get("percent") ??
-  defaultTheme.percentage;
+  const height = Number(searchParams.get("height")) || defaultTheme.cardHeight;
 
-const width =
-  Number(
-    searchParams.get("width")
-  ) ||
-  defaultTheme.cardWidth;
+  const borderWidth =
+    Number(searchParams.get("bw")) || defaultTheme.borderWidth;
 
-const height =
-  Number(
-    searchParams.get("height")
-  ) ||
-  defaultTheme.cardHeight;
+  const radius =
+    Number(searchParams.get("radius")) || defaultTheme.borderRadius;
+  const data = await getCurrentlyReading();
 
-const borderWidth =
-  Number(
-    searchParams.get("bw")
-  ) ||
-  defaultTheme.borderWidth;
-
-const radius =
-  Number(
-    searchParams.get("radius")
-  ) ||
-  defaultTheme.borderRadius;
-  const data =
-    await getCurrentlyReading();
-
-  const book =
-    transformBook(data);
+  const book = transformBook(data);
 
   if (!book) {
     return new Response(
@@ -103,109 +65,66 @@ const radius =
 `,
       {
         headers: {
-          "Content-Type":
-            "image/svg+xml",
+          "Content-Type": "image/svg+xml",
         },
-      }
+      },
     );
   }
-let cover = "";
+  let cover = "";
 
-if (book.coverImage) {
-  const response = await fetch(
-    book.coverImage
-  );
+  if (book.coverImage) {
+    const response = await fetch(book.coverImage);
 
-  const buffer =
-    await response.arrayBuffer();
+    const buffer = await response.arrayBuffer();
 
-  const base64 = Buffer.from(
-    buffer
-  ).toString("base64");
+    const base64 = Buffer.from(buffer).toString("base64");
 
-  const contentType =
-    response.headers.get(
-      "content-type"
-    ) || "image/jpeg";
+    const contentType = response.headers.get("content-type") || "image/jpeg";
 
-  cover = `data:${contentType};base64,${base64}`;
-}
-  const padding = Math.max(
-  10,
-  width * 0.022
-);
+    cover = `data:${contentType};base64,${base64}`;
+  }
+  const padding = Math.max(10, width * 0.022);
 
-const coverHeight = Math.min(
-  height - padding * 1,
-  height * 0.80
-);
+  const coverHeight = Math.min(height - padding * 1, height * 0.8);
 
-const coverWidth =
-  coverHeight * 0.72;
+  const coverWidth = coverHeight * 0.72;
 
-const coverX = padding;
+  const coverX = padding;
 
-const coverY =
-  (height - coverHeight) / 2;
+  const coverY = (height - coverHeight) / 2;
 
-const contentX =
-  coverX +
-  coverWidth +
-  padding * 1;
+  const contentX = coverX + coverWidth + padding * 1;
 
-const contentWidth =
-  width -
-  contentX -
-  padding;
+  const contentWidth = width - contentX - padding;
 
-const progressWidth =
-  contentWidth;
+  const progressWidth = contentWidth;
 
-const progressFillWidth =
-  (progressWidth *
-    book.percentage) /
-  100;
+  const progressFillWidth = (progressWidth * book.percentage) / 100;
 
-const titleLines =
-  splitTitle(book.title, 28);
+  const titleLines = splitTitle(book.title, 28);
 
-const headingX = contentX;
+  const headingX = contentX;
 
-const headingY =
-  coverY + 20;
+  const headingY = coverY + 20;
 
-const titleY =
-  headingY + 23;
+  const titleY = headingY + 23;
 
-const authorY =
-  titleY +
-  titleLines.length * 34 +
-  8;
+  const authorY = titleY + titleLines.length * 34 + 8;
 
-const progressY =
-  coverY +
-  coverHeight -
-  20;
+  const progressY = coverY + coverHeight - 20;
 
-const updateLabelY =
-  height - padding;
+  const updateLabelY = height - padding;
 
-const updateDateX =
-  width - padding;
+  const updateDateX = width - padding;
 
-const updateLabelX =
-  updateDateX - 170;
+  const updateLabelX = updateDateX - 170;
 
-const lastUpdated =
-  new Date().toLocaleDateString(
-    "en-US",
-    {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    }
-  );
-const svg = `
+  const lastUpdated = new Date().toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+  const svg = `
 <svg
  xmlns="http://www.w3.org/2000/svg"
  width="${width}"
@@ -238,10 +157,7 @@ const svg = `
   x="${headingX}"
   y="${headingY - 5}  "
   fill="${heading}"
-  font-size="${Math.max(
-    14,
-    width * 0.016
-  )}"
+  font-size="${Math.max(14, width * 0.016)}"
   font-weight="700"
   font-family="Arial"
  >
@@ -269,18 +185,15 @@ const svg = `
      (line, index) => `
  <text
   x="${contentX}"
-  y="${titleY + index *22}"
+  y="${titleY + index * 22}"
   fill="${titleColor}"
-  font-size="${Math.max(
-    18,
-    width * 0.02
-  )}"
+  font-size="${Math.max(18, width * 0.02)}"
   font-weight="700"
   font-family="Arial"
  >
   ${escapeXml(line).toWellFormed()}
  </text>
- `
+ `,
    )
    .join("")}
 
@@ -292,9 +205,7 @@ const svg = `
   font-size="10"
   font-family="Arial"
  >
-  ${escapeXml(
-    book.author
-  ).toWellFormed()}
+  ${escapeXml(book.author).toWellFormed()}
  </text>
 
 
@@ -370,35 +281,23 @@ const svg = `
 
   return new Response(svg, {
     headers: {
-      "Content-Type":
-        "image/svg+xml",
-      "Cache-Control":
-        "public, s-maxage=21600, stale-while-revalidate=86400",
+      "Content-Type": "image/svg+xml",
+      "Cache-Control": "public, s-maxage=21600, stale-while-revalidate=86400",
     },
   });
 }
 
-function splitTitle(
-  title: string,
-  maxLength = 28
-) {
-  const words =
-    title.split(" ");
+function splitTitle(title: string, maxLength = 28) {
+  const words = title.split(" ");
 
   const lines: string[] = [];
 
   let current = "";
 
   for (const word of words) {
-    const next =
-      current
-        ? `${current} ${word}`
-        : word;
+    const next = current ? `${current} ${word}` : word;
 
-    if (
-      next.length >
-      maxLength
-    ) {
+    if (next.length > maxLength) {
       if (current) {
         lines.push(current);
       }
@@ -416,9 +315,7 @@ function splitTitle(
   return lines.slice(0, 3);
 }
 
-function escapeXml(
-  unsafe: string
-) {
+function escapeXml(unsafe: string) {
   return unsafe
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")

@@ -1,7 +1,16 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { toPng } from "html-to-image";
+import {
+  Palette,
+  Eye,
+  Download,
+  Copy,
+  ExternalLink,
+  Check,
+  Code2,
+} from "lucide-react";
 
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { defaultTheme } from "@/lib/default-theme";
@@ -14,35 +23,36 @@ export default function WidgetPreview({
 }: {
   book: Record<string, unknown>;
 }) {
-  const [theme, setTheme] =
-    useLocalStorage(
-      "reading-widget-theme",
-      defaultTheme
-    );
+  const [theme, setTheme] = useLocalStorage(
+    "reading-widget-theme",
+    defaultTheme
+  );
 
-  const cardRef =
-    useRef<HTMLDivElement>(null);
+  const [copied, setCopied] = useState(false);
+  const [exporting, setExporting] = useState(false);
+
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const exportPNG = async () => {
-    if (!cardRef.current) return;
+    if (!cardRef.current || exporting) return;
 
-    const dataUrl = await toPng(
-      cardRef.current,
-      {
+    try {
+      setExporting(true);
+
+      const dataUrl = await toPng(cardRef.current, {
         cacheBust: true,
         pixelRatio: 3,
-      }
-    );
+      });
 
-    const link =
-      document.createElement("a");
-
-    link.download =
-      "hardcover-widget.png";
-
-    link.href = dataUrl;
-
-    link.click();
+      const link = document.createElement("a");
+      link.download = "hardcover-widget.png";
+      link.href = dataUrl;
+      link.click();
+    } catch (error) {
+      console.error("Failed to export widget:", error);
+    } finally {
+      setExporting(false);
+    }
   };
 
   const widgetUrl =
@@ -68,171 +78,195 @@ export default function WidgetPreview({
       ? `${window.location.origin}${widgetUrl}`
       : widgetUrl;
 
+  const copyWidgetUrl = async () => {
+    try {
+      await navigator.clipboard.writeText(fullWidgetUrl);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      console.error("Failed to copy widget URL.");
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-[#09090B]">
-      <div className="mx-auto max-w-7xl p-8">
-        {/* HEADER */}
+    <div className="relative min-h-screen bg-[#050816] text-white">
+      {/* Ambient cyan glow */}
+      <div className="pointer-events-none absolute left-1/2 top-0 h-96 w-96 -translate-x-1/2 rounded-full bg-cyan-500/5 blur-[120px]" />
 
-        <div className="mb-10">
-          <h1 className="text-4xl font-bold text-white">
-            Hardcover Widget Builder
-          </h1>
+      <div className="relative mx-auto max-w-7xl px-4 py-8 sm:px-8 sm:py-12">
+        {/* PAGE HEADER */}
+        <header className="mb-10">
+          <div className="mb-4 flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-cyan-400/30 bg-cyan-400/8">
+              <Palette
+                className="h-6 w-6 text-[#00E5FF]"
+                strokeWidth={1.5}
+              />
+            </div>
 
-          <p className="mt-2 text-zinc-400">
-            Create, customize, export,
-            and embed your reading
-            widget.
-          </p>
-        </div>
+            <div>
+              <p className="text-[10px] font-medium tracking-[0.25em] text-[#00E5FF] sm:text-xs">
+                CONTROL CENTER
+              </p>
 
-        {/* THEME SETTINGS */}
-
-        <section
-          className="
-            mb-10
-            rounded-3xl
-            border
-            border-zinc-800
-            bg-zinc-950
-            p-6
-          "
-        >
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold text-white">
-              Theme Settings
-            </h2>
-
-            <p className="text-sm text-zinc-500">
-              Customize colors, sizing,
-              borders and layout.
-            </p>
+              <p className="mt-1 text-xs text-slate-500">
+                HARDCOVER READING WIDGET
+              </p>
+            </div>
           </div>
 
-          <ThemeCustomizer
-            theme={theme}
-            setTheme={setTheme}
-          />
+          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            Widget Builder
+          </h1>
+
+          <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-400 sm:text-base">
+            Customize your reading widget, experiment with themes,
+            preview changes instantly, and export or embed your design.
+          </p>
+
+          <div className="mt-6 h-px bg-linear-to-r from-cyan-400/40 via-cyan-400/10 to-transparent" />
+        </header>
+
+        {/* THEME SETTINGS */}
+        <section className="mb-8 overflow-hidden rounded-2xl border border-cyan-500/20 bg-[#080D1B]/90 shadow-[0_0_40px_rgba(0,229,255,0.025)]">
+          <div className="border-b border-slate-800/80 px-5 py-5 sm:px-7">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-cyan-400/20 bg-cyan-400/6">
+                <Palette className="h-5 w-5 text-[#00E5FF]" />
+              </div>
+
+              <div>
+                <h2 className="font-semibold text-white">
+                  Theme Settings
+                </h2>
+
+                <p className="mt-1 text-xs text-slate-500 sm:text-sm">
+                  Colors, dimensions, borders, and appearance.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-4 sm:p-7">
+            <ThemeCustomizer
+              theme={theme}
+              setTheme={setTheme}
+            />
+          </div>
         </section>
 
         {/* LIVE PREVIEW */}
+        <section className="overflow-hidden rounded-2xl border border-cyan-500/20 bg-[#080D1B]/90 shadow-[0_0_50px_rgba(0,229,255,0.035)]">
+          <div className="border-b border-slate-800/80 px-5 py-5 sm:px-7">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-cyan-400/20 bg-cyan-400/6">
+                <Eye className="h-5 w-5 text-[#00E5FF]" />
+              </div>
 
-        <section
-          className="
-            rounded-3xl
-            border
-            border-zinc-800
-            bg-zinc-950
-            p-8
-          "
-        >
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold text-white">
-              Live Preview
-            </h2>
+              <div>
+                <h2 className="font-semibold text-white">
+                  Live Preview
+                </h2>
 
-            <p className="text-sm text-zinc-500">
-              This card updates instantly
-              as you customize it.
-            </p>
+                <p className="mt-1 text-xs text-slate-500 sm:text-sm">
+                  Your widget updates as you customize the theme.
+                </p>
+              </div>
+            </div>
           </div>
 
-          {/* ACTIONS */}
+          <div className="p-4 sm:p-7">
+            {/* ACTION BUTTONS */}
+            <div className="mb-6 flex flex-wrap gap-3">
+              <button
+                onClick={exportPNG}
+                disabled={exporting}
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#00E5FF] px-4 py-2.5 text-sm font-semibold text-[#050816] transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                <Download className="h-4 w-4" />
+                {exporting ? "Exporting..." : "Export PNG"}
+              </button>
 
-          <div className="mb-8 flex flex-wrap gap-3">
-            <button
-              onClick={exportPNG}
-              className="
-                rounded-xl
-                bg-cyan-500
-                px-5
-                py-2.5
-                font-medium
-                text-black
-                transition
-                hover:opacity-90
-              "
-            >
-              Export PNG
-            </button>
+              <button
+                onClick={copyWidgetUrl}
+                className="inline-flex items-center justify-center gap-2 rounded-lg border border-cyan-500/30 bg-cyan-500/4 px-4 py-2.5 text-sm font-medium text-cyan-300 transition hover:border-cyan-400/60 hover:bg-cyan-500/10"
+              >
+                {copied ? (
+                  <Check className="h-4 w-4" />
+                ) : (
+                  <Copy className="h-4 w-4" />
+                )}
+                {copied ? "Copied!" : "Copy Widget URL"}
+              </button>
 
-            <button
-              onClick={() =>
-                navigator.clipboard.writeText(
-                  fullWidgetUrl
-                )
-              }
-              className="
-                rounded-xl
-                border
-                border-cyan-500/30
-                px-5
-                py-2.5
-                text-cyan-400
-                transition
-                hover:bg-cyan-500/10
-              "
-            >
-              Copy Widget URL
-            </button>
+              <a
+                href={widgetUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-2.5 text-sm font-medium text-slate-300 transition hover:border-slate-500 hover:bg-slate-800"
+              >
+                <ExternalLink className="h-4 w-4" />
+                Open Widget
+              </a>
+            </div>
 
-            <a
-              href={widgetUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="
-                rounded-xl
-                border
-                border-zinc-700
-                px-5
-                py-2.5
-                text-zinc-300
-                transition
-                hover:bg-zinc-900
-              "
-            >
-              Open Widget
-            </a>
-          </div>
+            {/* WIDGET URL */}
+            <div className="mb-8 rounded-xl border border-cyan-500/15 bg-[#050816] p-4">
+              <div className="mb-3 flex items-center gap-2">
+                <Code2 className="h-4 w-4 text-[#00E5FF]" />
 
-          {/* URL PREVIEW */}
+                <p className="text-[10px] font-medium tracking-[0.2em] text-slate-400">
+                  EMBED URL
+                </p>
+              </div>
 
-          <div
-            className="
-              mb-10
-              rounded-2xl
-              border
-              border-zinc-800
-              bg-zinc-900
-              p-4
-            "
-          >
-            <p className="mb-2 text-xs uppercase tracking-wider text-zinc-500">
-              Widget URL
-            </p>
+              <code className="block break-all text-xs leading-6 text-cyan-300 sm:text-sm">
+                {fullWidgetUrl}
+              </code>
+            </div>
 
-            <code
-              className="
-                block
-                break-all
-                text-sm
-                text-cyan-400
-              "
-            >
-              {fullWidgetUrl}
-            </code>
-          </div>
+            {/* PREVIEW CANVAS */}
+            <div className="overflow-x-auto rounded-xl border border-slate-800/80 bg-[#050816] p-4 sm:p-8">
+              <div className="mb-6 flex items-center justify-between gap-3">
+                <p className="text-[10px] font-medium tracking-[0.2em] text-slate-500">
+                  WIDGET CANVAS
+                </p>
 
-          {/* CARD */}
+                <span className="rounded-md border border-cyan-500/20 bg-cyan-500/5 px-2.5 py-1 text-[10px] text-cyan-300">
+                  LIVE
+                </span>
+              </div>
 
-          <div className="flex justify-center">
-            <div ref={cardRef}>
-              <ReadingCard
-                book={book}
-                theme={theme}
-              />
+              <div className="flex min-w-max justify-center">
+                <div ref={cardRef}>
+                  <ReadingCard
+                    book={book}
+                    theme={theme}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* FOOTER NOTE */}
+            <div className="mt-5 flex items-center justify-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#00E5FF]" />
+
+              <p className="text-xs text-slate-500">
+                Theme settings are saved locally in your browser.
+              </p>
             </div>
           </div>
         </section>
+
+        {/* FOOTER */}
+        <footer className="mt-8 border-t border-slate-800/80 pt-5 text-center">
+          <p className="text-xs text-slate-500">
+            <span className="text-[#00E5FF]">✦</span>{" "}
+            Hardcover Reading Widget
+            <span className="mx-2 text-slate-700">|</span>
+            Built for readers.
+          </p>
+        </footer>
       </div>
     </div>
   );
