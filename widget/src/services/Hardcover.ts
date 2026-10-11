@@ -7,7 +7,7 @@ export async function getCurrentlyReading() {
     },
     body: JSON.stringify({
       query: `
-          query CurrentBook {
+query CurrentBook {
   me {
     id
     username
@@ -21,17 +21,32 @@ export async function getCurrentlyReading() {
 
       user_book_reads {
         progress_pages
+        edition {
+          id
+          title
+          pages
+          image {
+            url
+          }
+        }
+      }
+
+      edition {
+        id
+        title
+        pages
+        image {
+          url
+        }
       }
 
       book {
         id
         title
         pages
-
         image {
           url
         }
-
         contributions {
           author {
             name
@@ -41,6 +56,7 @@ export async function getCurrentlyReading() {
     }
   }
 }
+
         `,
     }),
     next: {
@@ -54,36 +70,42 @@ export async function getCurrentlyReading() {
 
   return response.json();
 }
+
 export function transformBook(data: any) {
   const user = data?.data?.me?.[0];
+  const item = user?.user_books?.[0];
 
-  if (!user?.user_books?.length) {
-    return null;
-  }
+  if (!item) return null;
 
-  const item = user.user_books[0];
+  const read = item.user_book_reads?.[0];
+
+  const edition = read?.edition ?? item.edition;
+  const book = item.book;
 
   const progress = Math.max(
-    ...(item.user_book_reads?.map((read: any) => read.progress_pages ?? 0) ?? [
-      0,
-    ]),
+    0,
+    ...(item.user_book_reads?.map((read: any) => read.progress_pages ?? 0) ??
+      []),
   );
 
-  const totalPages = item.book?.pages ?? 0;
+  const totalPages = edition?.pages ?? book?.pages ?? 0;
 
   return {
-    id: item.book.id,
+    id: book.id,
+    title: book.title,
+    author: book.contributions?.[0]?.author?.name ?? "Unknown Author",
 
-    title: item.book.title,
+    coverImage: edition?.image?.url ?? book.image?.url ?? null,
 
-    author: item.book.contributions?.[0]?.author?.name ?? "Unknown Author",
-
-    coverImage: item.book.image?.url ?? null,
+    editionId: edition?.id ?? null,
+    editionTitle: edition?.title ?? null,
 
     progress,
-
     totalPages,
 
-    percentage: totalPages > 0 ? Math.round((progress / totalPages) * 100) : 0,
+    percentage:
+      totalPages > 0
+        ? Math.min(100, Math.round((progress / totalPages) * 100))
+        : 0,
   };
 }
