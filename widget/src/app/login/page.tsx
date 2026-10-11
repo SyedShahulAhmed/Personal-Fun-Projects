@@ -56,7 +56,7 @@ export default function LoginPage() {
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-500/[0.07] blur-[120px]" />
 
       <section className="relative w-full max-w-md">
-        <div className="rounded-2xl border border-cyan-500/20 bg-[#080D1B]/95 p-7 shadow-[0_0_60px_rgba(0,229,255,0.06)] sm:p-9">
+        <div className="rounded-2xl border border-cyan-500/20 bg-[#080D1B]/95 p-7 sm:p-9">
           {/* Header */}
           <div className="mb-8 flex flex-col items-center text-center">
             <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border border-cyan-400/30 bg-cyan-400/8 shadow-[0_0_30px_rgba(0,229,255,0.10)]">
