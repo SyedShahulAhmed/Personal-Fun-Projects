@@ -39,7 +39,9 @@ A custom SVG reading card that displays my currently reading book, cover, author
 
 <div align="center">
 
-<sub>✦ EVERY IDEA STARTS SOMEWHERE ✦</sub>
+
+
+<sub> EVERY IDEA STARTS SOMEWHERE </sub>
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:FFFFFF,50:777777,100:000000&height=160&section=footer&text=%E2%9C%A6%20DREAM%20%E2%80%A2%20BUILD%20%E2%80%A2%20REPEAT%20%E2%9C%A6&fontSize=20&fontColor=FFFFFF&fontAlignY=65&animation=fadeIn" width="100%" alt="Monochrome animated footer banner" />
 
