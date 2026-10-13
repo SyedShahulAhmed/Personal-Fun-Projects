@@ -3,9 +3,11 @@
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:000000,50:555555,100:FFFFFF&height=200&section=header&text=PERSONAL%20PROJECTS&fontSize=32&fontColor=FFFFFF&fontAlignY=38&desc=EXPERIMENT%20%E2%80%A2%20CREATE%20%E2%80%A2%20REPEAT&descSize=13&descAlignY=60&animation=fadeIn" width="100%" alt="Monochrome animated Personal Projects banner" />
 
 <img src="https://readme-typing-svg.demolab.com?font=Courier+New&size=20&duration=3000&pause=900&color=FFFFFF&center=true&vCenter=true&width=435&lines=Building+just+because+I+can...;Experimenting+without+limits...;Creating+things+I+enjoy+%E2%99%A1" alt="Monochrome animated typing text" />
-</div>
+
 
 <img src="https://64.media.tumblr.com/9de6fe643bf318eb91411756291170aa/186b3f82bc778ac8-7b/s640x960/136cb119415fb2345a920db37a5c57870db9dbc9.gifv">
+
+</div>
 
 <img src = "https://64.media.tumblr.com/81223568e4a2acdbdc656b536cb3ec39/9f40624fb93ae11e-ba/s2048x3072/eddc4ca5ce935f11547524664603f59f65892e43.gifv">
 <div align="center" style="padding: 10px 20px;">
